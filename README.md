@@ -1,4 +1,4 @@
-jquery-a-slideshow
-==================
+jQuery (a) SlideShow Plugin
+===========================
 
-jQuery (a) Slideshow Plugin
+jQuery plugin for build slideshow from any HTML tags
