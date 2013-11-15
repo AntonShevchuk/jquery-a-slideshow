@@ -15,29 +15,29 @@
         time:3000,      // time out between slides
         history:false,  // change/check location hash
         title:true,     // show title
-        titleshow:false,// always show title
+        titleShow:false,// always show title
         callback:null,  // callback function - call when slide changed - receive index and label
         panel:true,     // show controls panel
         play:false,     // play slide show
         loop:true,
         effect:'fade',  // available fade, scrollUp/Down/Left/Right, zoom, zoomFade, growX, growY
-        effecttime:1000,// available fast,slow,normal and any valid fx speed value
+        effectTime:1000,// available fast,slow,normal and any valid fx speed value
         filter:true,    // remove <br/>, empty <div>, <p> and other stuff
-        nextclick:false,      // bind content click next slide
-        playclick:false,      // bind content click play/stop
-        playhover:false,      // bind content hover play/stop
-        playhoverr:false,     // bind content hover stop/play (reverse of playhover)
-        playframe:true,       // show frame "Play Now!"
-        loadframe:true,       // show frame with "loading"
-        fullscreen:false,     // in full window size
+        nextClick:false,      // bind content click next slide
+        playClick:false,      // bind content click play/stop
+        playHover:false,      // bind content hover play/stop
+        playHoverr:false,     // bind content hover stop/play (reverse of playHover)
+        playFrame:true,       // show frame "Play Now!"
+        loadFrame:true,       // show frame with "loading"
+        fullScreen:false,     // in full window size
 
-        imgresize:false,      // resize image to slide show window
-        imgzoom:true,         // zoom image to slide show window (for smaller side)
-        imgcenter:true,       // set image to center
-        imgajax:true,         // load images from links
-        imglink:true,         // go to external link by click
+        imageResize:false,      // resize image to slide show window
+        imageZoom:true,         // zoom image to slide show window (for smaller side)
+        imageCenter:true,       // set image to center
+        imageAjax:true,         // load images from links
+        imageLink:true,         // go to external link by click
 
-        linkajax:false,       // load html from links
+        linkAjax:false,       // load html from links
         help:'Plugin homepage: <a href="http://slideshow.hohli.com">(a)Slideshow</a><br/>'+
              'Author homepage: <a href="http://anton.shevchuk.name">Anton Shevchuk</a>',
 
@@ -53,6 +53,21 @@
         }
     };
 
+    // public methods
+    var slideshow = {
+        options:{},
+        // initial
+        init: function(params) {
+            // merge defaults options with initials
+            this.options = $.extend({}, defaults, params);
+            if (!this.data('aslideshow')) {
+                // save options to registry
+                this.data('aslideshow', this.options);
+            }
+        }
+    };
+
+
     /**
      * Create a new instance of slideShow.
      *
@@ -63,6 +78,18 @@
      * @constructor
      */
     $.fn.slideshow = function(settings) {
+
+        // public methods
+        /*if ( slideshow[settings] ) {
+            // check method
+            return slideshow[settings].apply( this, Array.prototype.slice.call( arguments, 1 ));
+        } else if ( typeof method === 'object' || ! method ) {
+            // call initial method
+            return slideshow.init.apply( this, arguments );
+        } else {
+            // wrong call
+            $.error('Method "' + settings + '" is not exist');
+        }*/
 
         /**
          * Construct
@@ -96,14 +123,14 @@
                     ext.find('.aslideshow-content > div:empty').remove();
                 }
 
-                // fullscreen
-                if (this.options.fullscreen) {
+                // fullScreen
+                if (this.options.fullScreen) {
                     $('body').css({overflow:'hidden', padding:0});
 
                     this.options.width  = $(window).width();
                     this.options.height = ($(window).height()>$(document).height())?$(window).height():$(document).height();
 
-                    ext.addClass('slideshow-fullscreen');
+                    ext.addClass('slideshow-fullScreen');
                 }
 
                 this.length = ext.find('.aslideshow-content > *').length;
@@ -112,7 +139,7 @@
                 if (this.options.title) {
                     ext.prepend('<div class="aslideshow-label-place"><div class="aslideshow-label aslideshow-opacity"></div></div>');
 
-                    if (!this.options.titleshow) {
+                    if (!this.options.titleShow) {
                          ext.find('.aslideshow-label-place').hover(function(){
                             $(this).find('.aslideshow-label').fadeIn();
                         }, function() {
@@ -171,14 +198,14 @@
                 var content = ext.find('.aslideshow-content');
                     content.css({width:this.options.width,height:this.options.height});
 
-                // add playframe
-                if (this.options.playframe) {
+                // add playFrame
+                if (this.options.playFrame) {
 					this.playFrame = true;
                     ext.append('<div class="aslideshow-shadow aslideshow-opacity aslideshow-frame"><div></div></div>');
                 }
 
-                // add loadframe
-                if (this.options.loadframe) {
+                // add loadFrame
+                if (this.options.loadFrame) {
                     ext.append('<div class="aslideshow-shadow aslideshow-opacity aslideshow-load"><div></div></div>');
                 }
                 ext.find('.aslideshow-shadow').css({width:this.options.width,height:this.options.height});
@@ -262,7 +289,7 @@
                     if (title.length == 0) title = slide.contents().html();
                     title  = title.replace(/\"/i,'\'');   // if you use single quotes for tag attribs
 
-                    if (this.options.imgajax && reimage.test(href)) {
+                    if (this.options.imageAjax && reimage.test(href)) {
 
                         var img = new Image();
                             img.alt = title;
@@ -270,7 +297,7 @@
                         this._load($(img), href, index);
 
                         slide.contents().replaceWith(img);
-                    } else if (this.options.linkajax && relocal.test(href)) {
+                    } else if (this.options.linkAjax && relocal.test(href)) {
                         $.get(href, function(data){
                             _self.goToSlide(index);
                             slide.contents().replaceWith('<div>'+data+'</div>');
@@ -311,7 +338,7 @@
                 /**
                  * Go to external link by click
                  */
-                if (this.options.imglink && link) {
+                if (this.options.imageLink && link) {
                    $(slide).css({cursor:'pointer'})
 				           .click(function(){
                         document.location = link;
@@ -322,7 +349,7 @@
                 /**
                  * Play/stop on content click (like image and other)
                  */
-                if (this.options.playclick)
+                if (this.options.playClick)
                     $(slide).css({cursor:'pointer'})
 					        .click(function(){
                         if (_self.playId) {
@@ -379,7 +406,7 @@
              * @return {jQuery} el
              */
             this._resize = function (el) {
-                if (!this.options.imgresize && !this.options.fullscreen) {
+                if (!this.options.imageResize && !this.options.fullScreen) {
                     return el;
                 }
 
@@ -397,7 +424,7 @@
              * @return {jQuery} el
              */
             this._zoom = function (el) {
-                if (!this.options.imgzoom) {
+                if (!this.options.imageZoom) {
                     return el;
                 }
 
@@ -426,7 +453,7 @@
              * @return {jQuery} el
              */
             this._center = function (el){
-                if (!this.options.imgcenter) {
+                if (!this.options.imageCenter) {
                     return el;
                 }
 
@@ -460,7 +487,7 @@
                 /**
                  * Go to next slide on content click (optional)
                  */
-                if (_self.options.nextclick)
+                if (_self.options.nextClick)
                 ext.find('.aslideshow-content').click(function(){
                     _self.stop();
                     _self.next();
@@ -533,11 +560,11 @@
                 /**
                  * Show frame
                  */
-                if (this.options.playframe) {
+                if (this.options.playFrame) {
                     ext.find('.aslideshow-frame').click(function(){
                         ext.find('.aslideshow-frame').remove();
 
-                        if (_self.options.playclick)
+                        if (_self.options.playClick)
                             setTimeout(function(){ _self.play() }, _self.options.time);
 
                         return false;
@@ -547,7 +574,7 @@
                 /**
                  * Play/stop on hover
                  */
-                if (this.options.playhover) {
+                if (this.options.playHover) {
                     ext.hover(function(){
                         if (!_self.playId) {
                             _self.play();
@@ -562,7 +589,7 @@
                 /**
                  * Stop/Play on hover
                  */
-                if (this.options.playhoverr) {
+                if (this.options.playHoverr) {
                     ext.hover(function(){
                         if (_self.playId) {
                             _self.stop();
@@ -842,10 +869,10 @@
 
                 var _self = this;
 
-                prev.animate(prevAni,this.options.effecttime);
+                prev.animate(prevAni,this.options.effectTime);
 
                 // play next slide animation, hide prev slide, update label, update counter
-                next.show().animate({top: 0, left: 0,opacity: 1, width: this.options.width, height: this.options.height}, this.options.effecttime, function () {
+                next.show().animate({top: 0, left: 0,opacity: 1, width: this.options.width, height: this.options.height}, this.options.effectTime, function () {
                         prev.hide();
                         if (_self.playFlag) _self._play();
                         _self._label();
