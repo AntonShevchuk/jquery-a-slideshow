@@ -1,0 +1,23 @@
+{
+    "name": "aslideshow",
+    "title": "jQuery (a)Slideshow",
+    "description": "jQuery plugin for build slideshow from any HTML tags",
+    "version": "0.9.0",
+    "author": {
+        "name": "Anton Shevchuk",
+        "url": "http://anton.shevchuk.name/"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://github.com/AntonShevchuk/jquery-a-slideshow/blob/master/MIT-LICENSE.txt"
+        }
+    ],
+    "dependencies": {
+        "jquery": ">=1.9"
+    },
+    "bugs": "https://github.com/AntonShevchuk/jquery-a-slideshow/issues",
+    "homepage": "http://slideshow.hohli.com/",
+    "docs": "http://slideshow.hohli.com/",
+    "download": "https://github.com/AntonShevchuk/jquery-a-slideshow/archive/master.zip"
+}
