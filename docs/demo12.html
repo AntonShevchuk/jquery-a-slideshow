@@ -23,13 +23,14 @@
 
 <h2>Use plugin API</h2>
 <div>
-<hr/>
+    <hr/>
     <div id="CustomSlideshow">
         <a href="img/image_0.jpg" title="Camomile">Slide no.1</a>
         <a href="img/image_1.jpg" title="Bumblebees">Slide no.2</a>
         <a href="img/image_2.jpg" title="Wood Toothpicks">Slide no.3</a>
     </div>
-<hr/>
+    <hr/>
+    <p>Try to use custom controls</p>
     <ul id="ApiSlideshow">
         <li><a href="#" name="first">First</a></li>
         <li><a href="#" name="prev">Prev</a></li>
@@ -41,7 +42,6 @@
     <ul>
         <li><a href="#" id="slideN">Go to slide 2</a></li>
     </ul>
-
 </div>
 <h2>Source</h2>
 <div>
@@ -59,7 +59,18 @@
 //&lt;![CDATA[
 $(document).ready(function(){
     $('#CustomSlideshow').slideshow({
+        play:false,
+        playFrame:false
+    });
 
+    $('a[name=play]').click(function() {
+        $('#CustomSlideshow').slideshow('play');
+        return false;
+    });
+
+    $('#slideN').click(function() {
+        $('#CustomSlideshow').slideshow('slide', 1);
+        return false;
     });
 });
 //]]&gt;
@@ -82,7 +93,7 @@ $(function(){
     });
 
     $('#slideN').click(function() {
-        $('#CustomSlideshow').slideshow('slide', 2);
+        $('#CustomSlideshow').slideshow('slide', 1);
         return false;
     });
 });
