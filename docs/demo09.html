@@ -44,10 +44,10 @@
     <pre class="brush: jscript">
 &lt;script type=&quot;text/javascript&quot;&gt;
 //&lt;![CDATA[
-    $('#CustomSlideshow').slideshow({
-        callback:function(i,txt) {
-            $('h3').html('Slide #' + (i+1) + ': ' + txt);
-        }
+    $('#CustomSlideshow').slideshow();
+
+    $('#CustomSlideshow').on('slide.aslideshow', function(event, i, slide, title) {
+        $('h3').html('Slide #' + (i+1) + ': ' + title);
     });
 //]]&gt;
 &lt;/script&gt;
@@ -57,10 +57,10 @@
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){    
-    $('#CustomSlideshow').slideshow({
-        callback:function(i,txt) {
-            $('h3').html('Slide #' + (i+1) + ': ' + txt);
-        }
+    $('#CustomSlideshow').slideshow();
+
+    $('#CustomSlideshow').on('slide.aslideshow', function(event, i, slide, title) {
+        $('h3').html('Slide #' + (i+1) + ': ' + title);
     });
 });
 //]]>

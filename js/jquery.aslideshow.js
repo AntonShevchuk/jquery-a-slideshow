@@ -68,6 +68,7 @@
         this.goToFlag = false;
         this.length   = 0;
         this.inited   = [];
+        this.slides   = [];
         this.titles   = [];
         this.index = this.options.index;
     };
@@ -96,6 +97,11 @@
         this.$container.wrapInner('<div class="aslideshow"><div class="aslideshow-content"></div></div>');
         this.$slideshow = this.$container.children();
 
+        // prepare stack of slides
+        this.$slideshow.find('.aslideshow-content').children().each(function(){
+            _self.slides.push($(this));
+        });
+
         // fullScreen
         if (this.options.fullScreen) {
             $('body').css({overflow:'hidden', padding:0});
@@ -103,7 +109,7 @@
             this.options.width  = $(window).width();
             this.options.height = ($(window).height()>$(document).height())?$(window).height():$(document).height();
 
-            this.$slideshow.addClass('slideshow-fullScreen');
+            this.$slideshow.addClass('aslideshow-fullscreen');
         }
 
         // build title
@@ -114,9 +120,13 @@
 
             if (!this.options.titleShow) {
                 this.$slideshow.find('.aslideshow-label-place').hover(function(){
-                    _self.$label.fadeIn();
+                    if (_self.updateLabel()) {
+                        _self.$label.fadeIn();
+                    }
                 }, function() {
-                    _self.$label.fadeOut();
+                    if (_self.updateLabel()) {
+                        _self.$label.fadeOut();
+                    }
                 });
                 this.$label.hide();
             }
@@ -126,7 +136,7 @@
         // build panel
         if (this.options.panel) {
             this.$slideshow.append('<div class="aslideshow-panel-place"><div class="aslideshow-panel aslideshow-opacity"></div></div>');
-            panel = this.$slideshow.find('.aslideshow-panel');
+            var panel = this.$slideshow.find('.aslideshow-panel');
             if (this.options.controls.first)
                 panel.append('<a class="first button" href="#first">First</a>');
 
@@ -153,9 +163,9 @@
 
             if (this.options.controls.hide) {
                 this.$slideshow.find('.aslideshow-panel-place').hover(function(){
-                    $(this).find('.aslideshow-panel').fadeIn();
+                    panel.stop().fadeIn();
                 }, function() {
-                    $(this).find('.aslideshow-panel').fadeOut();
+                    panel.stop().fadeOut();
                 });
                 panel.hide();
             }
@@ -194,7 +204,7 @@
         this.initSlide(this.index);
 
         // show slide
-        this.$slideshow.find('.aslideshow-slide:eq('+this.index+')').show();
+        this.slides[this.index].show();
 
         // update label
         this.updateLabel();
@@ -202,12 +212,18 @@
         // init checker
         if (this.options.history) {
             setInterval(function(){
-                _self._check()
+                _self.checkHash()
             }, 300);
         }
 
         return true;
     };
+    /**
+     * Initial slide:
+     *  - a
+     * @param index
+     * @returns {boolean}
+     */
     slideShow.prototype.initSlide = function(index) {
         // initialize only ones
         for (var i = 0, loopCnt = this.inited.length; i < loopCnt; i++) {
@@ -220,12 +236,12 @@
         this.inited.push(index);
 
         // current slide
-        var slide = this.$slideshow.find('.aslideshow-slide:eq('+index+')');
+        var slide = this.slides[index];
 
-        var _self = this;
-        var title = '';
-        var link  = false;
-        var name  = slide.contents().attr('name');
+        var _self = this,
+            title = '',
+            link  = false,
+            name  = slide.contents().attr('name');
 
         if (name != '') {
             var rename  = new RegExp("^((https?|ftp):\/\/)", "i");
@@ -276,7 +292,7 @@
 
                 slide.contents().replaceWith(img);
                 /* } else {
-                 this._load(slide.contents(), slide.contents().attr("src"), index);
+                 this.loadImage(slide.contents(), slide.contents().attr("src"), index);
                  } */
             } else {
                 this.goToSlide(index);
@@ -292,7 +308,9 @@
             }
         }
 
-        if (link) title = '<a href="'+link+'" title="'+title+'">'+title+'</a>';
+        if (link) {
+            title = '<a href="'+link+'" title="'+title+'">'+title+'</a>';
+        }
 
         this.titles[index] = title;
 
@@ -474,8 +492,8 @@
      */
     slideShow.prototype._goToSlide = function(n) {
 
-        var next = this.$slideshow.find('.aslideshow-content > *:eq('+n+')');
-        var prev = this.$slideshow.find('.aslideshow-content > *:eq('+this.index+')');
+        var next = this.slides[n];
+        var prev = this.slides[this.index];
 
         // restore next slide after all effects, set z-index = 0 for prev slide
         prev.css({zIndex:0});
@@ -577,7 +595,7 @@
                 _self.updateHash();
                 _self.goToFlag = false;
 
-                _self.$container.trigger('slide.aslideshow', [n, $(this)]);
+                _self.$container.trigger('slide.aslideshow', [n, next, _self.titles[n]]);
             }
         );
     };
@@ -762,7 +780,11 @@
         return img;
     };
 
-    slideShow.prototype._check = function() {
+    /**
+     * Check Hash
+     * @private
+     */
+    slideShow.prototype.checkHash = function() {
         // when animation in progress
         if (this.goToFlag) {
             return;
@@ -815,14 +837,17 @@
         }
     };
     slideShow.prototype.updateLabel = function() {
-        var title = this.titles[this.index];
-
-        // always load label of slide
+        // check options
         if (!this.options.title) {
-            return;
+            return false;
         }
-
-        this.$label.html(title);
+        var title = this.titles[this.index];
+        if (title && title != undefined && title != '') {
+            this.$label.html(title);
+            return true;
+        } else {
+            return false;
+        }
     };
     /**
      * Update counter data
@@ -844,41 +869,29 @@
      * @constructor
      */
     $.fn.slideshow = function(settings) {
-
-        // public methods
-        /*if ( slideshow[settings] ) {
-            // check method
-            return slideshow[settings].apply( this, Array.prototype.slice.call( arguments, 1 ));
-        } else if ( typeof method === 'object' || ! method ) {
-            // call initial method
-            return slideshow.init.apply( this, arguments );
-        } else {
-            // wrong call
-            $.error('Method "' + settings + '" is not exist');
-        }*/
-
         /**
          * Construct
          */
         this.each(function(){
-
-            var show = new slideShow(this, settings);
-            show.build();
-            show.show();
-
-            return this;
+            var show = $(this).data('a.slideshow');
+            // initialization of slideshow
+            // with or without settings
+            if (typeof settings === 'object' || !settings) {
+                show = new slideShow(this, settings);
+                show.build();
+                show.show();
+                // save slideshow to data registry
+                $(this).data('a.slideshow', show);
+            } else {
+                if (show && show[settings]) {
+                    // public methods
+                    show[settings](Array.prototype.slice.call( arguments, 1 ));
+                } else {
+                    // wrong call
+                    $.error('Method "' + settings + '" is not exist')
+                }
+            }
         });
-
-        /**
-         * external functions - append to $
-         */
-        /*this.playSlide = function(){ this.each(function () { this.play();  }) };
-        this.stopSlide = function(){ this.each(function () { this.stop();  }) };
-        this.nextSlide = function(){ this.each(function () { this.next();  }) };
-        this.prevSlide = function(){ this.each(function () { this.prev();  }) };
-        this.getTitle  = function(){ this.each(function () { this.getTitle(); }) };
-        this.goToSlide = function(n){ this.each(function () { this.goToSlide(n); }) };*/
-
 
         return this;
     }
