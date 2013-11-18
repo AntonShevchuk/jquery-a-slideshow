@@ -2,7 +2,7 @@
     "name": "aslideshow",
     "title": "jQuery (a)Slideshow",
     "description": "jQuery plugin for build slideshow from any HTML tags",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": {
         "name": "Anton Shevchuk",
         "url": "http://anton.shevchuk.name/"
