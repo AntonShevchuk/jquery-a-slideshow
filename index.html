@@ -44,7 +44,7 @@
         <li>Mozilla Firefox</li>
         <li>Google Chrome</li>
         <li>Safari</li>
-        <li>Internet Explorer 8.0+</li>
+        <li>Internet Explorer 9.0+</li>
     </ul>
     
     Go to:
@@ -56,15 +56,16 @@
         <li><a href="#demo">Demo</a></li>
     </ul>
 </div>
-<h2><a name="Donate"/>Donate</h2>
+<a name="donate"></a>
+<h2>Donate</h2>
 <ul>
-    <li><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=mxleod@yahoo.com&amp;lc=US&amp;item_name=jQuery%20Plugin&amp;currency_code=USD" rel="nofollow"><img src="https://www.paypal.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" alt="PayPal - The safer, easier way to pay online!"></img></a></li>
+    <li><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=mxleod@yahoo.com&amp;lc=US&amp;item_name=jQuery%20Plugin&amp;currency_code=USD" rel="nofollow"><img src="https://www.paypal.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" alt="PayPal - The safer, easier way to pay online!"/></a></li>
 </ul>
 <ul>
-    <li>WME: <tt>E119370261590</tt></li>
-    <li>WMZ: <tt>Z454864056905</tt></li>
-    <li>WMU: <tt>U278559603576</tt></li>
-    <li>WMR: <tt>R258034622442</tt></li>
+    <li>WME: <strong>E119370261590</strong></li>
+    <li>WMZ: <strong>Z454864056905</strong></li>
+    <li>WMU: <strong>U278559603576</strong></li>
+    <li>WMR: <strong>R258034622442</strong></li>
     <li>Yandex.Money: <a href="https://money.yandex.ru/donate.xml?to=41001362542875" rel="nofollow">41001362542875</a></li>
 </ul>
 
@@ -74,7 +75,7 @@
     From GitHub:
     <blockquote>
     <p>
-        <a href="https://github.com/AntonShevchuk/jquery-a-slideshow/releases" title="Download (a)Slideshow from Google Code">http://code.google.com/p/a-slideshow/downloads/list</a><br/>
+        <a href="https://github.com/AntonShevchuk/jquery-a-slideshow/releases" title="Download (a)Slideshow from GitHub">https://github.com/AntonShevchuk/jquery-a-slideshow/releases</a><br/>
     </p>
     </blockquote>
 
@@ -122,7 +123,7 @@ $(document).ready(function(){
         <img src="docs/img/image_1.jpg" alt="It's slide number three"/>
         <p><label>Title</label>Some text... on slide four</p>
         <a href="docs/img/image_2.jpg">It's slide number five</a>
-        <a href="example/info.html">It's slide number six</a>
+        <a href="docs/img/image_0.jpg">It's slide number six, again</a>
         <a href="http://domain.com/example/info.html">It's slide number seven</a>
     </div>
 
@@ -132,15 +133,16 @@ $(document).ready(function(){
 <a name="methods"></a>
 <h2>Methods</h2>
 <div>
-<p>This is function work only with one slideshow</p>
+<p>Public methods of slideshow</p>
 
 <ul>
-    <li>playSlide - play slideshow</li>
-    <li>stopSlide - stop slideshow</li>
-    <li>nextSlide - next slide (or first)</li>
-    <li>prevSlide - previouse slide (or last)</li>
-    <li>goToSlide - go to slide number N</li>
-    <li>getTitle - return title of current slide</li>
+    <li><code>play</code> - play slideshow</li>
+    <li><code>stop</code> - stop slideshow</li>
+    <li><code>next</code> - next slide (or first)</li>
+    <li><code>prev</code> - previouse slide (or last)</li>
+    <li><code>first</code> - go to first slide</li>
+    <li><code>last</code> - go to last slide</li>
+    <li><code>slide</code> - go to slide number N</li>
 </ul>
 
 <small>[<a href="#top">Top</a>]</small>
@@ -170,7 +172,6 @@ $(document).ready(function(){
 		history:false,  // change/check location hash 
         title:true,     // show title
         titleShow:false,// always show title
-        callback:null,  // callback function - call when slide changed - receive index and label
         panel:true,     // show controls panel
         play:false,     // play slideshow
         loop:true,      // looping

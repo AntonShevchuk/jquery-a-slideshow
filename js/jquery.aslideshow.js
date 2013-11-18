@@ -16,7 +16,6 @@
         history:false,  // change/check location hash
         title:true,     // show title
         titleShow:false,// always show title
-        callback:null,  // callback function - call when slide changed - receive index and label
         panel:true,     // show controls panel
         play:false,     // play slide show
         loop:true,
@@ -434,10 +433,9 @@
         if (this.options.playFrame) {
             this.$slideshow.find('.aslideshow-frame').click(function(){
                 _self.$slideshow.find('.aslideshow-frame').remove();
-
-                if (_self.options.playClick)
+                if (_self.options.playClick) {
                     setTimeout(function(){ _self.play() }, _self.options.time);
-
+                }
                 return false;
             });
         }
@@ -476,6 +474,7 @@
      * Go to N-slide
      * @param {number} n
      */
+    slideShow.prototype.slide =
     slideShow.prototype.goToSlide = function(n) {
         switch (true) {
             case (this.index == n):
@@ -486,7 +485,8 @@
                 this._goToSlide(n);
                 return true;
         }
-    };/**
+    };
+    /**
      * Go to N-slide
      * @param {number} n
      */
@@ -666,6 +666,21 @@
             i = this.index + 1;
         }
         this.goToSlide(i);
+    };
+
+    /**
+     * Go to first slide
+     * Just for public API
+     */
+    slideShow.prototype.first = function () {
+        this.goToSlide(0);
+    };
+    /**
+     * Go to last slide
+     * Just for public API
+     */
+    slideShow.prototype.last = function () {
+        this.goToSlide(this.length-1);
     };
 
     /**
@@ -869,6 +884,7 @@
      * @constructor
      */
     $.fn.slideshow = function(settings) {
+        var args = arguments;
         /**
          * Construct
          */
@@ -884,8 +900,9 @@
                 $(this).data('a.slideshow', show);
             } else {
                 if (show && show[settings]) {
-                    // public methods
-                    show[settings](Array.prototype.slice.call( arguments, 1 ));
+                    // all methods is public
+                    show[settings](Array.prototype.slice.call( args, 1 ));
+                    // todo: make private methods private :)
                 } else {
                     // wrong call
                     $.error('Method "' + settings + '" is not exist')

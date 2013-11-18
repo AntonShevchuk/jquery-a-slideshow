@@ -1,4 +1,6 @@
 jQuery (a) SlideShow Plugin
 ===========================
 
-jQuery plugin for build slideshow from any HTML tags
+This jQuery plugin allows you to create dynamic, controllable slideshows or presentations for your website
+.
+Simply define a block of HTML to be a slideshow or presentation. You can use any tags like &lt;p&gt;, &lt;img&gt;, &lt;div&gt; etc.

@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>(a)SlideShow jQuery Plugin - Demo - Default configuration</title>		
-    <link href="../js/jquery.aslideshow/shadow/styles.css" media="screen" rel="stylesheet" type="text/css" />	
+	<title>(a)SlideShow jQuery Plugin - Demo - API</title>
+    <link href="../js/jquery.aslideshow/shadow/styles.css" media="screen" rel="stylesheet" type="text/css" />
     <link href="../style.css" media="screen" rel="stylesheet" type="text/css" />	
-	<script type="text/javascript" src="../js/jquery.js"></script>	
+	<script type="text/javascript" src="../js/jquery.js"></script>
 	<script type="text/javascript" src="../js/jquery.aslideshow.js"></script>
-    
+
     <script type="text/javascript" src="http://scripts.hohli.com/brush/shCore.js"></script>
 	<script type="text/javascript" src="http://scripts.hohli.com/brush/shBrushJScript.js"></script>
 	<script type="text/javascript" src="http://scripts.hohli.com/brush/shBrushXml.js"></script>
@@ -21,15 +21,27 @@
 
 <body>
 
-<h2>Use slideshow event</h2>
-<h3>Only one</h3>
+<h2>Use plugin API</h2>
 <div>
-<hr>
+<hr/>
     <div id="CustomSlideshow">
         <a href="img/image_0.jpg" title="Camomile">Slide no.1</a>
         <a href="img/image_1.jpg" title="Bumblebees">Slide no.2</a>
         <a href="img/image_2.jpg" title="Wood Toothpicks">Slide no.3</a>
     </div>
+<hr/>
+    <ul id="ApiSlideshow">
+        <li><a href="#" name="first">First</a></li>
+        <li><a href="#" name="prev">Prev</a></li>
+        <li><a href="#" name="play">Play</a></li>
+        <li><a href="#" name="stop">Stop</a></li>
+        <li><a href="#" name="next">Next</a></li>
+        <li><a href="#" name="last">Last</a></li>
+    </ul>
+    <ul>
+        <li><a href="#" id="slideN">Go to slide 2</a></li>
+    </ul>
+
 </div>
 <h2>Source</h2>
 <div>
@@ -39,16 +51,17 @@
     &lt;a href=&quot;img/image_0.jpg&quot; title=&quot;Camomile&quot;&gt;Slide no.1&lt;/a&gt;
     &lt;a href=&quot;img/image_1.jpg&quot; title=&quot;Bumblebees&quot;&gt;Slide no.2&lt;/a&gt;
     &lt;a href=&quot;img/image_2.jpg&quot; title=&quot;Wood Toothpicks&quot;&gt;Slide no.3&lt;/a&gt;
-&lt;/div&gt;</pre>
+&lt;/div&gt;
+    </pre>
     <b>JavaScript</b>:
     <pre class="brush: jscript">
 &lt;script type=&quot;text/javascript&quot;&gt;
 //&lt;![CDATA[
-    $('#CustomSlideshow').slideshow();
+$(document).ready(function(){
+    $('#CustomSlideshow').slideshow({
 
-    $('#CustomSlideshow').on('slide.aslideshow', function(event, i, slide, title) {
-        $('h3').html('Slide #' + (i+1) + ': ' + title);
     });
+});
 //]]&gt;
 &lt;/script&gt;
     </pre>
@@ -56,11 +69,21 @@
 
 <script type="text/javascript">
 //<![CDATA[
-$(document).ready(function(){    
-    $('#CustomSlideshow').slideshow();
+$(function(){
+    $('#CustomSlideshow').slideshow({
+        play:false,
+        playFrame:false
+    });
 
-    $('#CustomSlideshow').on('slide.aslideshow', function(event, i, slide, title) {
-        $('h3').html('Slide #' + (i+1) + ': ' + title);
+    $('#ApiSlideshow').find('a').click(function() {
+        var apiCall = $(this).attr('name');
+        $('#CustomSlideshow').slideshow(apiCall);
+        return false;
+    });
+
+    $('#slideN').click(function() {
+        $('#CustomSlideshow').slideshow('slide', 2);
+        return false;
     });
 });
 //]]>
